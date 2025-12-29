@@ -90,12 +90,26 @@ document.addEventListener('DOMContentLoaded', function() {
             hamburger.classList.toggle('active');
         });
 
-        // Close mobile menu when clicking on a link
-        const navLinks = document.querySelectorAll('nav ul li a');
+        // Close mobile menu when clicking on a link (but not dropdown toggles)
+        const navLinks = document.querySelectorAll('nav ul li a:not(nav ul li.dropdown > a)');
         navLinks.forEach(link => {
             link.addEventListener('click', function() {
                 navMenu.classList.remove('active');
                 hamburger.classList.remove('active');
+            });
+        });
+
+        // Handle dropdown menus on mobile
+        const dropdownToggles = document.querySelectorAll('nav ul li.dropdown > a');
+        dropdownToggles.forEach(toggle => {
+            toggle.addEventListener('click', function(e) {
+                // Only prevent default on mobile for main dropdown toggles
+                if (window.innerWidth <= 768) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const parentLi = this.parentElement;
+                    parentLi.classList.toggle('active');
+                }
             });
         });
     }
